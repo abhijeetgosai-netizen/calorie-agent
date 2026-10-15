@@ -1,0 +1,10 @@
+services:
+  bot:
+    build:
+      context: .
+      args:
+        PROVIDERS: all   # or just your provider, e.g. openai — smaller image
+    env_file: .env
+    volumes:
+      - ./data:/app/data   # your food log lives here (SQLite) — back it up
+    restart: unless-stopped

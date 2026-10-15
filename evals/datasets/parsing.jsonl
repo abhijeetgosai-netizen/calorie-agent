@@ -1,0 +1,15 @@
+{"text": "2 boiled eggs and a slice of toast", "items": [{"names": ["egg"], "grams": 100}, {"names": ["toast", "bread"], "grams": 30}]}
+{"text": "200g chicken breast", "items": [{"names": ["chicken"], "grams": 200}]}
+{"text": "dal chawal", "items": [{"names": ["dal", "lentil"], "grams": 200}, {"names": ["rice", "chawal"], "grams": 160}]}
+{"text": "a banana and an apple", "items": [{"names": ["banana"], "grams": 118}, {"names": ["apple"], "grams": 182}]}
+{"text": "3 chapatis with 1 bowl paneer curry", "items": [{"names": ["chapati", "roti"], "grams": 120}, {"names": ["paneer"], "grams": 200}]}
+{"text": "1 can of coke", "items": [{"names": ["coke", "cola"], "grams": 355}]}
+{"text": "latte and a croissant", "items": [{"names": ["latte", "coffee"], "grams": 350}, {"names": ["croissant"], "grams": 60}]}
+{"text": "30g almonds", "items": [{"names": ["almond"], "grams": 30}]}
+{"text": "burger, medium fries and a diet coke", "items": [{"names": ["burger", "hamburger"], "grams": 220}, {"names": ["fries", "potato"], "grams": 115}, {"names": ["diet", "coke", "cola"], "grams": 355}]}
+{"text": "1 cup cooked oatmeal with 1 tbsp honey", "items": [{"names": ["oat", "oatmeal"], "grams": 234}, {"names": ["honey"], "grams": 21}]}
+{"text": "protein shake: 1 scoop whey with 300ml milk", "items": [{"names": ["whey", "protein"], "grams": 30}, {"names": ["milk"], "grams": 300}]}
+{"text": "2 idli with sambar", "items": [{"names": ["idli"], "grams": 80}, {"names": ["sambar"], "grams": 150}]}
+{"text": "a handful of grapes", "items": [{"names": ["grape"], "grams": 80}]}
+{"text": "150 g greek yogurt and 20g granola", "items": [{"names": ["yogurt", "yoghurt"], "grams": 150}, {"names": ["granola"], "grams": 20}]}
+{"text": "two tacos de pollo", "items": [{"names": ["taco", "chicken"], "grams": 200}]}

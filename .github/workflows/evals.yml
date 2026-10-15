@@ -1,0 +1,31 @@
+name: Evals
+# Calls a real LLM (costs a few cents). Runs nightly and on demand, not on every PR.
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: "LLM_MODEL to evaluate"
+        default: "openai:gpt-4o-mini"
+  schedule:
+    - cron: "0 3 * * *"
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    env:
+      LLM_MODEL: ${{ inputs.model || 'openai:gpt-4o-mini' }}
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+      GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+      USDA_API_KEY: ${{ secrets.USDA_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen --extra all
+      - run: uv run pytest evals -m eval -v
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: evals/results/*.json

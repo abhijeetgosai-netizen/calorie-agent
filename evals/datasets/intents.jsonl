@@ -1,0 +1,51 @@
+{"text": "had 2 eggs and toast for breakfast", "intent": "log_food"}
+{"text": "2 rotis with dal", "intent": "log_food"}
+{"text": "lunch was a chicken caesar salad", "intent": "log_food"}
+{"text": "just drank a can of coke", "intent": "log_food"}
+{"text": "1 banana", "intent": "log_food"}
+{"text": "ate a big bowl of pasta", "intent": "log_food"}
+{"text": "dinner: grilled salmon, rice, broccoli", "intent": "log_food"}
+{"text": "protein shake with 1 scoop whey and milk", "intent": "log_food"}
+{"text": "aaj dal chawal khaya", "intent": "log_food"}
+{"text": "snacked on 30g almonds", "intent": "log_food"}
+{"text": "200g paneer tikka", "intent": "log_food"}
+{"text": "I had a latte and a croissant", "intent": "log_food"}
+{"text": "com\u00ed dos tacos de pollo", "intent": "log_food"}
+{"text": "oats with banana and honey", "intent": "log_food"}
+{"text": "burger and fries at mcdonalds", "intent": "log_food"}
+{"text": "how much have I eaten today?", "intent": "query_today"}
+{"text": "calories so far", "intent": "query_today"}
+{"text": "how much protein left for today", "intent": "query_today"}
+{"text": "what's my total today", "intent": "query_today"}
+{"text": "am I over my calories today?", "intent": "query_today"}
+{"text": "today's summary please", "intent": "query_today"}
+{"text": "show my weekly report", "intent": "weekly_report"}
+{"text": "how did I do this week", "intent": "weekly_report"}
+{"text": "last 7 days summary", "intent": "weekly_report"}
+{"text": "weekly stats", "intent": "weekly_report"}
+{"text": "give me my week overview", "intent": "weekly_report"}
+{"text": "undo", "intent": "undo"}
+{"text": "delete the last entry", "intent": "undo"}
+{"text": "remove what I just logged", "intent": "undo"}
+{"text": "oops that last one was wrong, remove it", "intent": "undo"}
+{"text": "cancel my last log", "intent": "undo"}
+{"text": "set my goal to 1800 calories", "intent": "set_goal"}
+{"text": "my daily target is 2200 kcal and 140g protein", "intent": "set_goal"}
+{"text": "I want to eat 150g protein a day", "intent": "set_goal"}
+{"text": "I live in Mumbai", "intent": "set_goal"}
+{"text": "my timezone is America/New_York", "intent": "set_goal"}
+{"text": "change calorie goal to 2500", "intent": "set_goal"}
+{"text": "hi", "intent": "help"}
+{"text": "what can you do?", "intent": "help"}
+{"text": "how do I use this bot", "intent": "help"}
+{"text": "hello there", "intent": "help"}
+{"text": "how many calories in a pizza?", "intent": "off_topic"}
+{"text": "give me a recipe for butter chicken", "intent": "off_topic"}
+{"text": "what's the capital of France", "intent": "off_topic"}
+{"text": "should I go keto?", "intent": "off_topic"}
+{"text": "write python code to sort a list", "intent": "off_topic"}
+{"text": "tell me a joke", "intent": "off_topic"}
+{"text": "what's the weather today", "intent": "off_topic"}
+{"text": "is intermittent fasting healthy", "intent": "off_topic"}
+{"text": "I have chest pain after eating, what should I do", "intent": "off_topic"}
+{"text": "recommend a good restaurant", "intent": "off_topic"}
