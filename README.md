@@ -1,5 +1,9 @@
 # 🍽 Calorie Agent
 
+[![CI](https://github.com/abhijeetgosai-netizen/calorie-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/abhijeetgosai-netizen/calorie-agent/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.12+](https://img.shields.io/badge/python-3.12%2B-blue.svg)](https://www.python.org/downloads/)
+
 **Log your food by just texting it.** A self-hosted Telegram bot that turns "2 eggs and a slice of toast" into calories, protein, carbs and fat, keeps a daily running total, and sends you a weekly report.
 
 - 🔑 **Bring your own key:** OpenAI, Anthropic, Gemini, Groq, or fully local and free with Ollama.

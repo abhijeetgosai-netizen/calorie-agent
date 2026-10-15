@@ -10,7 +10,9 @@ from calorie_agent.nutrition.types import FoodMatch, Per100g
 log = logging.getLogger(__name__)
 
 URL = "https://world.openfoodfacts.org/cgi/search.pl"
-HEADERS = {"User-Agent": "calorie-agent/0.1 (open-source; github.com/abhijeetgosai-netizen/calorie-agent)"}
+HEADERS = {
+    "User-Agent": "calorie-agent/0.1 (open-source; github.com/abhijeetgosai-netizen/calorie-agent)"
+}
 
 
 def _per100(product: dict) -> Per100g | None:
