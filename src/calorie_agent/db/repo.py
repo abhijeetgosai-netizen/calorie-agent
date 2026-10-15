@@ -9,7 +9,7 @@ from sqlalchemy.engine import Engine
 from sqlmodel import Session, col, select
 
 from calorie_agent.db.models import FoodItem, MealEntry, User, utcnow
-from calorie_agent.nutrition.types import ResolvedItem
+from calorie_agent.nutrition.types import LoggedFood, Per100g, ResolvedItem
 
 
 @dataclass(frozen=True)
@@ -18,6 +18,7 @@ class Totals:
     protein_g: float = 0.0
     carbs_g: float = 0.0
     fat_g: float = 0.0
+    fiber_g: float = 0.0
     entries: int = 0
 
 
@@ -110,6 +111,7 @@ class Repository:
                         protein_g=it.protein_g,
                         carbs_g=it.carbs_g,
                         fat_g=it.fat_g,
+                        fiber_g=it.fiber_g,
                         source=it.source,
                         match_name=it.match_name,
                     )
@@ -134,6 +136,47 @@ class Repository:
             s.commit()
             return entry, items
 
+    # ---- personal food history ---------------------------------------------
+    def recent_foods(self, user_id: int, limit: int = 300) -> list[LoggedFood]:
+        """Distinct foods this user has logged before, most recent first.
+
+        Per-100 g values are recovered from the stored row (value / grams x 100), so a
+        repeat meal reuses exactly the numbers that resolved the first time. Rows whose
+        recovered values are impossible (bad historic data) are skipped.
+        """
+        with Session(self.engine) as s:
+            rows = list(
+                s.exec(
+                    select(FoodItem)
+                    .join(MealEntry, col(FoodItem.entry_id) == col(MealEntry.id))
+                    .where(MealEntry.user_id == user_id, col(FoodItem.grams) > 0)
+                    .order_by(col(MealEntry.id).desc())
+                    .limit(limit)
+                )
+            )
+        out: list[LoggedFood] = []
+        seen: set[str] = set()
+        for it in rows:
+            key = " ".join(it.name.lower().split())
+            if key in seen:
+                continue
+            seen.add(key)
+            f = 100.0 / it.grams
+            try:
+                per = Per100g(
+                    kcal=it.kcal * f,
+                    protein_g=it.protein_g * f,
+                    carbs_g=it.carbs_g * f,
+                    fat_g=it.fat_g * f,
+                    fiber_g=it.fiber_g * f,
+                )
+            except ValueError:
+                continue
+            out.append(
+                LoggedFood(name=it.name, match_name=it.match_name, source=it.source, per100g=per)
+            )
+        return out
+
     # ---- aggregates (deterministic) ----------------------------------------
     def _totals_by_day(self, user_id: int, start: date, end: date) -> dict[date, Totals]:
         with Session(self.engine) as s:
@@ -144,6 +187,7 @@ class Repository:
                     func.coalesce(func.sum(FoodItem.protein_g), 0),
                     func.coalesce(func.sum(FoodItem.carbs_g), 0),
                     func.coalesce(func.sum(FoodItem.fat_g), 0),
+                    func.coalesce(func.sum(FoodItem.fiber_g), 0),
                     func.count(func.distinct(MealEntry.id)),
                 )
                 .join(FoodItem, col(FoodItem.entry_id) == col(MealEntry.id))
@@ -155,7 +199,7 @@ class Repository:
                 .group_by(MealEntry.local_date)
             ).all()
         return {
-            r[0]: Totals(float(r[1]), float(r[2]), float(r[3]), float(r[4]), int(r[5]))
+            r[0]: Totals(float(r[1]), float(r[2]), float(r[3]), float(r[4]), float(r[5]), int(r[6]))
             for r in rows
         }
 

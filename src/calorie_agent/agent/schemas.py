@@ -37,6 +37,33 @@ class ParsedFood(BaseModel):
         description="Generic English nutrition-database search term, most specific first, "
         "e.g. 'egg whole boiled', 'rice white cooked', 'chapati roti'. No brand unless given."
     )
+    # Stated values: filled ONLY when the user gave the number themselves. These are
+    # totals for the portion eaten, not per-100 g, and they bypass every lookup.
+    kcal: float | None = Field(
+        default=None,
+        description="Calories the user explicitly stated for this item, else null. "
+        "Copy the number they gave; never compute or guess it.",
+    )
+    protein_g: float | None = Field(
+        default=None, description="Protein in grams if the user stated it, else null."
+    )
+    carbs_g: float | None = Field(
+        default=None, description="Carbohydrate in grams if the user stated it, else null."
+    )
+    fat_g: float | None = Field(
+        default=None, description="Fat in grams if the user stated it, else null."
+    )
+    fiber_g: float | None = Field(
+        default=None, description="Dietary fiber in grams if the user stated it, else null."
+    )
+
+    @property
+    def has_stated_nutrition(self) -> bool:
+        """True when the user supplied any nutrition number themselves."""
+        return any(
+            v is not None
+            for v in (self.kcal, self.protein_g, self.carbs_g, self.fat_g, self.fiber_g)
+        )
 
 
 class ParsedMeal(BaseModel):
@@ -52,6 +79,16 @@ class ParsedMeal(BaseModel):
 
 MAX_ITEMS = 15
 MAX_GRAMS = 3000.0
+# Sanity bounds for numbers the user states. Anything outside is treated as not stated,
+# so the item falls back to a normal database lookup rather than logging nonsense.
+MAX_STATED_KCAL = 5000.0
+MAX_STATED_MACRO_G = 1000.0
+
+
+def _clean_stated(value: float | None, cap: float) -> float | None:
+    if value is None or value < 0 or value > cap:
+        return None
+    return value
 
 
 def validate_meal(meal: ParsedMeal) -> ParsedMeal:
@@ -59,6 +96,12 @@ def validate_meal(meal: ParsedMeal) -> ParsedMeal:
     items = [
         it for it in meal.items if it.name.strip() and 0 < it.grams <= MAX_GRAMS and it.quantity > 0
     ][:MAX_ITEMS]
+    for it in items:
+        it.kcal = _clean_stated(it.kcal, MAX_STATED_KCAL)
+        it.protein_g = _clean_stated(it.protein_g, MAX_STATED_MACRO_G)
+        it.carbs_g = _clean_stated(it.carbs_g, MAX_STATED_MACRO_G)
+        it.fat_g = _clean_stated(it.fat_g, MAX_STATED_MACRO_G)
+        it.fiber_g = _clean_stated(it.fiber_g, MAX_STATED_MACRO_G)
     names = {it.name for it in items}
     unclear = [u for u in meal.unclear_items if u in names]
     return ParsedMeal(items=items, unclear_items=unclear)

@@ -46,6 +46,7 @@ class FoodItem(SQLModel, table=True):
     protein_g: float
     carbs_g: float
     fat_g: float
+    fiber_g: float = 0.0  # 0 on rows logged before fiber tracking was added
     source: str
     match_name: str | None = None
 
@@ -60,4 +61,5 @@ class FoodCache(SQLModel, table=True):
     protein_100g: float
     carbs_100g: float
     fat_100g: float
+    fiber_100g: float = 0.0
     fetched_at: datetime = Field(default_factory=utcnow)

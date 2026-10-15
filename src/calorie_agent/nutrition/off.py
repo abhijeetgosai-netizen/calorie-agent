@@ -26,6 +26,7 @@ def _per100(product: dict) -> Per100g | None:
             protein_g=float(n.get("proteins_100g", 0) or 0),
             carbs_g=float(n.get("carbohydrates_100g", 0) or 0),
             fat_g=float(n.get("fat_100g", 0) or 0),
+            fiber_g=float(n.get("fiber_100g", 0) or 0),
         )
     except (TypeError, ValueError):
         return None

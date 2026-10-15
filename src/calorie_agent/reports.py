@@ -11,7 +11,8 @@ from calorie_agent.nutrition.types import ResolvedItem
 
 HELP = (
     "🍽 <b>Calorie Agent</b>\n"
-    "Just tell me what you ate, e.g. <i>2 eggs and a slice of toast</i>.\n\n"
+    "Just tell me what you ate, e.g. <i>2 eggs and a slice of toast</i>.\n"
+    "I track calories, protein, carbs, fat and fiber.\n\n"
     "/today — today's totals\n"
     "/week — last 7 days report\n"
     "/undo — remove your last log today\n"
@@ -37,11 +38,11 @@ def _n(x: float) -> str:
 
 
 def _macros(t: Totals | ResolvedItem) -> str:
-    return f"P {t.protein_g:.1f}g · C {t.carbs_g:.1f}g · F {t.fat_g:.1f}g"
+    return f"P {t.protein_g:.1f}g · C {t.carbs_g:.1f}g · F {t.fat_g:.1f}g · Fib {t.fiber_g:.1f}g"
 
 
 def item_line(it: ResolvedItem) -> str:
-    approx = "~" if it.is_estimate else ""
+    approx = "~" if it.is_estimate else ("*" if it.is_stated else "")
     qty = f"{it.quantity:g} {it.unit}".strip()
     return (
         f"• {escape(it.name)} ({escape(qty)}, {it.grams:.0f}g): "
@@ -61,7 +62,8 @@ def day_summary(t: Totals, user: User, label: str = "Today") -> str:
         protein += f" / {user.protein_goal_g}g"
     return (
         f"📊 <b>{label}:</b> {kcal}\n"
-        f"Protein {protein} · Carbs {t.carbs_g:.0f}g · Fat {t.fat_g:.0f}g"
+        f"Protein {protein} · Carbs {t.carbs_g:.0f}g · Fat {t.fat_g:.0f}g "
+        f"· Fiber {t.fiber_g:.0f}g"
     )
 
 
@@ -72,6 +74,8 @@ def logged(items: Sequence[ResolvedItem], day: Totals, user: User) -> str:
         lines.append(f"Meal total: {_n(meal_kcal)} kcal")
     if any(i.is_estimate for i in items):
         lines.append("<i>~ = AI estimate (not found in food databases)</i>")
+    if any(i.is_stated for i in items):
+        lines.append("<i>* = your own figures, used as given</i>")
     return "\n".join(lines) + "\n\n" + day_summary(day, user)
 
 
@@ -137,9 +141,11 @@ def weekly(days: Sequence[DayTotals], user: User, end: date) -> str:
     avg_p = sum(d.totals.protein_g for d in logged_days) / n
     avg_c = sum(d.totals.carbs_g for d in logged_days) / n
     avg_f = sum(d.totals.fat_g for d in logged_days) / n
+    avg_fib = sum(d.totals.fiber_g for d in logged_days) / n
     summary = [
         f"Days logged: {n}/7",
-        f"Avg/day: {_n(avg_kcal)} kcal · P {avg_p:.0f}g · C {avg_c:.0f}g · F {avg_f:.0f}g",
+        f"Avg/day: {_n(avg_kcal)} kcal · P {avg_p:.0f}g · C {avg_c:.0f}g "
+        f"· F {avg_f:.0f}g · Fib {avg_fib:.0f}g",
     ]
     if user.kcal_goal:
         on_target = sum(

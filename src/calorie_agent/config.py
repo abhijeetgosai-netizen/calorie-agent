@@ -26,6 +26,8 @@ class Settings(BaseSettings):
     # Nutrition data
     usda_api_key: str = "DEMO_KEY"  # free key: https://fdc.nal.usda.gov/api-key-signup
     use_open_food_facts: bool = True
+    # Reuse nutrition from the user's own past logs before querying public databases.
+    use_food_history: bool = True
     match_threshold: float = 0.5
 
     # Storage

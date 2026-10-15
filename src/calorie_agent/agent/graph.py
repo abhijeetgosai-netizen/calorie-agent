@@ -67,7 +67,7 @@ def build_graph(deps: Deps, checkpointer: BaseCheckpointSaver | None = None):
         meal = ParsedMeal.model_validate(state["parsed"])
         if not meal.items:
             return {"reply": reports.NO_FOOD}
-        items = await asyncio.gather(*(nutrition.resolve(i) for i in meal.items))
+        items = await asyncio.gather(*(nutrition.resolve(i, state["user_id"]) for i in meal.items))
         day = date.fromisoformat(state["local_date"])
         repo.add_entry(state["user_id"], state["text"], list(items), day)
         user = repo.get_user(state["user_id"])

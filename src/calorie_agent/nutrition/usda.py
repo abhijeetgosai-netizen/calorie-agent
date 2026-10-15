@@ -14,6 +14,7 @@ URL = "https://api.nal.usda.gov/fdc/v1/foods/search"
 DATA_TYPES = "Foundation,SR Legacy,Survey (FNDDS)"
 ENERGY_IDS = (1008, 2047, 2048)  # kcal, Atwater general, Atwater specific
 PROTEIN, FAT, CARBS = 1003, 1004, 1005
+FIBER = 1079  # Fiber, total dietary
 
 
 def _nutrients(food: dict) -> Per100g | None:
@@ -32,6 +33,7 @@ def _nutrients(food: dict) -> Per100g | None:
             protein_g=vals.get((PROTEIN, "G"), 0.0),
             carbs_g=vals.get((CARBS, "G"), 0.0),
             fat_g=vals.get((FAT, "G"), 0.0),
+            fiber_g=vals.get((FIBER, "G"), 0.0),
         )
     except ValueError:
         return None
